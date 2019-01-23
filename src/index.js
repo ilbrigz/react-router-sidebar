@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-import "./styles.css";
+import SideBar from "./SideBar";
 
 function App() {
   return (
     <div className="App">
-      <h1>test</h1>
+      <SideBar />
     </div>
   );
 }
