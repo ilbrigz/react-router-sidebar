@@ -7,18 +7,31 @@ const routes = [
   {
     path: "/",
     exact: true,
-    sidebar: () => <div>home!</div>,
+    sidebar: ({ slash }) => <Link to="/">home!{slash && <span>/</span>}</Link>,
     main: () => <h2>Home</h2>
   },
+
   {
     path: "/bubblegum",
-    sidebar: () => <div>bubblegum!</div>,
-    main: () => <h2>Bubblegum</h2>
+    sidebar: ({ slash }) => (
+      <Link to="/bubblegum">bubblegum!{slash && <span>/</span>}</Link>
+    ),
+    main: () => <h2>Bubblegum </h2>
   },
   {
     path: "/shoelaces",
-    sidebar: () => <div>shoelaces!</div>,
+    sidebar: ({ slash }) => (
+      <Link to="/shoelaces">shoelaces!{slash && <span>/</span>}</Link>
+    ),
     main: () => <h2>Shoelaces</h2>
+  },
+  {
+    path: "/shoelaces/red",
+    sidebar: ({ slash }, ...props) => {
+      console.log(props.match);
+      return <Link to="/shoelaces/red">red!{slash && <span>/</span>}}</Link>;
+    },
+    main: () => <h2>Shoelaces - Red</h2>
   }
 ];
 
@@ -44,17 +57,25 @@ class SideBar extends React.Component {
               <li>
                 <Link to="/shoelaces">Shoelaces</Link>
               </li>
+              <li>
+                <Link to="/shoelaces/red">red</Link>
+              </li>
             </ul>
             {/* two routes - for sidebar and main body
              the sidebar can be used in breadcrumbs*/
-            routes.map(route => (
-              <Route
-                key={route.path}
-                path={route.path}
-                exact={route.exact}
-                component={route.sidebar}
-              />
-            ))}
+            routes.map((route, index, array) => {
+              const needsSlash = index == 0 || index == array.length - 1;
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  exact={route.exact}
+                  render={() => (
+                    <route.sidebar slash={needsSlash ? false : true} />
+                  )}
+                />
+              );
+            })}
           </div>
           <div style={{ flex: 1, padding: "10px" }}>
             {routes.map(route => (
