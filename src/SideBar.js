@@ -7,21 +7,35 @@ const routes = [
   {
     path: "/",
     exact: true,
-    sidebar: ({ slash }) => <Link to="/">home!{slash && <span>/</span>}</Link>,
+    sidebar: ({ slash }) => (
+      <Link to="/">
+        {/^\/\w+\/\w+$/.test(slash)
+          ? slash.replace(/^\/\w+/, "")
+          : slash.replace(/^\//, "")}
+      </Link>
+    ),
     main: () => <h2>Home</h2>
   },
 
   {
     path: "/bubblegum",
     sidebar: ({ slash }) => (
-      <Link to="/bubblegum">bubblegum!{slash && <span>/</span>}</Link>
+      <Link to="/bubblegum">
+        {/^\/\w+\/\w+$/.test(slash)
+          ? slash.replace(/^\/\w+/, "")
+          : slash.replace(/^\//, "")}
+      </Link>
     ),
     main: () => <h2>Bubblegum </h2>
   },
   {
     path: "/shoelaces",
     sidebar: ({ slash }) => (
-      <Link to="/shoelaces">shoelaces!{slash && <span>/</span>}</Link>
+      <Link to="/shoelaces">
+        {/^\/\w+\/\w+$/.test(slash)
+          ? slash.replace(/^\/\w+/, "")
+          : slash.replace(/^\//, "")}
+      </Link>
     ),
     main: () => <h2>Shoelaces</h2>
   },
@@ -29,7 +43,13 @@ const routes = [
     path: "/shoelaces/red",
     sidebar: ({ slash }, ...props) => {
       console.log(props.match);
-      return <Link to="/shoelaces/red">red!{slash && <span>/</span>}}</Link>;
+      return (
+        <Link to="/shoelaces/red">
+          {/^\/\w+\/\w+$/.test(slash)
+            ? slash.replace(/^\/\w+/, "")
+            : slash.replace(/^\//, "")}
+        </Link>
+      );
     },
     main: () => <h2>Shoelaces - Red</h2>
   }
@@ -70,9 +90,7 @@ class SideBar extends React.Component {
                   key={route.path}
                   path={route.path}
                   exact={route.exact}
-                  render={() => (
-                    <route.sidebar slash={needsSlash ? false : true} />
-                  )}
+                  render={() => <route.sidebar slash={route.path} />}
                 />
               );
             })}
